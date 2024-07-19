@@ -1,0 +1,21 @@
+const express = require('express');
+const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
+const cors = require('cors');
+
+const app = express();
+
+// Set up CORS
+app.use(cors({
+    origin: 'http://localhost:4200', // Allow requests from this origin (your Angular app)
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Enable cookies and authentication headers
+    optionsSuccessStatus: 204
+  }));
+
+app.use(express.json());
+app.use('/api', userRoutes);
+app.use('/api/product', productRoutes);
+app.use('/local-files', express.static('/'));
+
+module.exports = app;
