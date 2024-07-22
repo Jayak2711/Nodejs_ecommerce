@@ -14,9 +14,10 @@ const insertCartData = async (req, res) => {
 };
 
 const deleteCartByCarId = async (req, res) => {
+  console.log('sadddddasddas',req.body)
   try {
-  const result = await productService.deleteCartByProdId(req.params.id);
-  console.log(result.rows[0])
+  const result = await productService.deleteCartByProdId(req.body);
+  console.log('',result)
  res.status(200).json({ message: 'Data deleted successfully',status : '200'});
   } catch (error) {
     console.log(error)
@@ -77,7 +78,7 @@ const selectAllProduct = async (req, res) => {
 const deleteProductById = async (req, res) => {
   try {
   const result = await productService.deleteProductById(req.params.id);
- res.status(200).json({ message: 'Data deleted successfully',status : '200'});
+ res.status(200).json({ message: 'Cart removed successfully',status : '200'});
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Error deleting data' });

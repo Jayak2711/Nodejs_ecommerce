@@ -39,6 +39,19 @@ const insertOrderRec = async (req, res) => {
   } 
   catch (error) {
     await pool.query('ROLLBACK');
+    console.error('Error executing query', err.stack);
+    res.status(500).json({ error: 'Error inserting data' });
+  }
+};
+
+
+const insertAllCartRec = async (req, res) => {
+  try {
+    const result = await orderService.insertAllCartRec(req.body);
+    res.status(200).json({ message: 'Data inserted successfully',result : result.rows,status : '200'});
+  } 
+  catch (error) {
+    await pool.query('ROLLBACK');
     console.error(error)
     res.status(500).json({ error: 'Error inserting data' });
   }
@@ -48,5 +61,6 @@ module.exports = {
     getAllOrderAdmin,
     getAllOrderWithUserId,
     getorderWithDate,
-    insertOrderRec
+    insertOrderRec,
+    insertAllCartRec
 }

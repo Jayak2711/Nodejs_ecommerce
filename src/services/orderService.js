@@ -16,9 +16,14 @@ const getAllOrderWithUserId = async (id) => {
   const insertOrderRec = async (id) => {
     return await oderModel.insertOrderRec(id);
   };
+
+  const insertAllCartRec = async (id) => {
+    return await oderModel.insertAllCartRec(id);
+  };
 module.exports = {
     getAllOrderAdmin,
     getAllOrderWithUserId,
     getorderWithDate,
-    insertOrderRec
+    insertOrderRec,
+    insertAllCartRec
 }

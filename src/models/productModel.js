@@ -10,8 +10,9 @@ const insertCartByProdId = async(res) => {
   }
   
 const deleteCartByProdId = async(res) => {
-  const id = res;
-  let data =   pool.query('DELETE FROM public.cart_tbl WHERE cart_id = $1', [id]);
+  const ids = res;
+  const text = 'DELETE FROM public.cart_tbl WHERE cart_id = ANY($1) RETURNING *';
+  const data = await pool.query(text, [ids]);
   return data;
 }
 
