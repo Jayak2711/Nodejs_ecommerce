@@ -4,6 +4,7 @@ const ProductController = require('../controllers/ProductController');
 const router = express.Router();
 
 router.post('/cart/',ProductController.insertCartData); 
+router.post('/addproduct',ProductController.addNewProduct); 
 router.delete('/cart',ProductController.deleteCartByCarId);
 router.get('/cart/:id',ProductController.selectCartByCarId);
 router.get('/cart',ProductController.getAllCart);

@@ -8,6 +8,15 @@ const insertCartByProdId = async(res) => {
   await pool.query('COMMIT');
   return data;
   }
+
+  const addNewProduct = async(res) => {
+    const keys = Object.keys(res);
+    const values = Object.values(res);
+    const placeholders = keys.map((key, index) => `$${index + 1}`).join(', ');
+    let data =  pool.query(`INSERT INTO product (${keys.join(', ')}) VALUES (${placeholders}) RETURNING *`,values);
+    await pool.query('COMMIT');
+    return data;
+    }
   
 const deleteCartByProdId = async(res) => {
   const ids = res;
@@ -39,7 +48,7 @@ const getAllCategory = async() => {
 
 const selectProductByCategory = async(res) => {
   const id = res;
-  let data = await pool.query(`SELECT * FROM product where id = $1 `,[id]);
+  let data = await pool.query(`SELECT * FROM product where categoryid = $1 `,[id]);
   return data;
 }
 
@@ -65,5 +74,6 @@ module.exports = {
     getAllCategory,
     selectProductByCategory,
     selectAllProduct,
-    deleteProductById
+    deleteProductById,
+    addNewProduct
 };

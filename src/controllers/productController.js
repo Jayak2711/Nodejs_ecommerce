@@ -13,6 +13,18 @@ const insertCartData = async (req, res) => {
   }
 };
 
+const addNewProduct = async (req, res) => {
+  try {
+    const result = await productService.addNewProduct(req.body);
+    res.status(200).json({ message: 'Data inserted successfully',result : result.rows[0],status : '200'});
+  } 
+  catch (error) {
+    await pool.query('ROLLBACK');
+    console.error(error)
+    res.status(500).json({ error: 'Error inserting data' });
+  }
+};
+
 const deleteCartByCarId = async (req, res) => {
   console.log('sadddddasddas',req.body)
   try {
@@ -94,5 +106,6 @@ module.exports = {
   getAllCategory,
   selectProductByCategory,
   selectAllProduct,
-  deleteProductById
+  deleteProductById,
+  addNewProduct
 };

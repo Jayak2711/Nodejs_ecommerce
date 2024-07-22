@@ -16,9 +16,14 @@ const ChangePasswordByUserId = async (id) => {
   return await userModel.ChangePasswordByUserId(id);
 };
 
+const updateUserById = async (user) => {
+  return await userModel.updateUserById(user);
+};
+
 module.exports = {
   getUserById,
   getUserByEmail,
   forgetPasswordByEmail,
-  ChangePasswordByUserId
+  ChangePasswordByUserId,
+  updateUserById
 };

@@ -28,11 +28,24 @@ const forgetPasswordByEmail = async (id) => {
   return data;
  };
 
+ const updateUserById = async (user) => {
+  const { user_id, user_name, email_id, password, first_name, last_name, phone_number } = user;
+  const data = await pool.query(
+    `UPDATE public.user_tbl
+     SET user_name = $2, email_id = $3, password = $4, first_name = $5, last_name = $6, phone_number = $7
+     WHERE user_id = $1
+     RETURNING *`,
+    [user_id, user_name, email_id, password, first_name, last_name, phone_number]
+  );
+  return data.rows[0];
+};
+ 
 
 module.exports = {
   getUserById,
   getUserbyMail,
   forgetPasswordByEmail,
-  ChangePasswordByUserId
+  ChangePasswordByUserId,
+  updateUserById
 
 };

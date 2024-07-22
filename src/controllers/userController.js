@@ -57,6 +57,16 @@ const forgetPasswordByEmail = async (req, res) => {
   }
 };
 
+const updateUserById = async (req, res) => {
+  try {
+    const updatedUser = req.body;
+    const user = await userService.updateUserById(updatedUser);
+    res.status(200).json({ message: 'User details updated successfully', user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 const ChangePasswordByUserId = async (req, res) => {
   try {
@@ -75,5 +85,6 @@ module.exports = {
   getUser,
   getUserbyMail,
   forgetPasswordByEmail,
-  ChangePasswordByUserId
+  ChangePasswordByUserId,
+  updateUserById
 };
