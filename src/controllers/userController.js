@@ -38,8 +38,10 @@ const getUserbyMail = async (req, res) => {
 };
 
 const forgetPasswordByEmail = async (req, res) => {
+  console.log('sadasdsads',req.body)
   try {
     const user = await userService.getUserByEmail(req.body);
+    console.log('sadasdasdsa',user)
     const arr = user.rows;
     if(arr.length  ==  0){
       return  res.status(200).json({
@@ -47,24 +49,31 @@ const forgetPasswordByEmail = async (req, res) => {
         status : 'failed'
         });
     }else{
-      try{
-        const passWordChange = await userService.constChangePasswordByEmail(req.body);
-        console.log(passWordChange)
-        res.status(200).json({message : 'Password Updated Successfully',result :(passWordChange.rows),status:'success'});
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-    
+      res.status(200).json({message : 'Email verified Successfully',result :(user.rows[0]),status:'success'});
     }
    
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({error: error.message,status:'failed'});
   }
 };
+
+
+const ChangePasswordByUserId = async (req, res) => {
+  try {
+    const user = await userService.ChangePasswordByUserId(req.body);
+      res.status(200).json({message : 'Password updated Succesfully',result :(user.rows[0]),status:'success'});
+   
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: error.message,status:'failed' });
+  }
+};
+
 
 
 module.exports = {
   getUser,
   getUserbyMail,
-  forgetPasswordByEmail
+  forgetPasswordByEmail,
+  ChangePasswordByUserId
 };

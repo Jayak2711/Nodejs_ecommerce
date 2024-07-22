@@ -15,12 +15,16 @@ const deleteCartByProdId = async(res) => {
   return data;
 }
 
+
+
 const selectCartByUserId = async(res) => {
   const id = res;
-  let data = await pool.query(`SELECT u.user_id, u.quantity,u.cart_id, c.createdby,c.description, c.name, c.price,c.imageurl  
+  let data = await pool.query(`SELECT u.user_id, u.quantity,u.cart_id, c.createdby,c.description, c.name, c.price,c.imageurl,u.p_id
     FROM  public.cart_tbl u JOIN product c ON u.p_id = c.id WHERE user_id = $1`,[id]);
   return data;
 }
+
+
 
 const getAllCartRecord = async() => {
   let data = pool.query('SELECT * FROM public.cart_tbl ORDER BY cart_id ASC ');

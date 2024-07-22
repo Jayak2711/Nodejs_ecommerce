@@ -1,5 +1,6 @@
 const productService = require('../services/productService');
 const pool = require('../config/db');
+
 const insertCartData = async (req, res) => {
   try {
     const result = await productService.insertCartByProdId(req.body);
@@ -15,8 +16,10 @@ const insertCartData = async (req, res) => {
 const deleteCartByCarId = async (req, res) => {
   try {
   const result = await productService.deleteCartByProdId(req.params.id);
+  console.log(result.rows[0])
  res.status(200).json({ message: 'Data deleted successfully',status : '200'});
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: 'Error deleting data' });
   }
 };
