@@ -3,7 +3,7 @@ const userService = require('../services/userService');
 const getUser = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
-    res.status(200).json(user.rows[0]);
+    res.status(200).json({'message':'sucess',result : user.rows[0],'status' :200 });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -61,8 +61,19 @@ const updateUserById = async (req, res) => {
   try {
     const updatedUser = req.body;
     const user = await userService.updateUserById(updatedUser);
-    res.status(200).json({ message: 'User details updated successfully', user });
+    res.status(200).json({ 'message': 'User details updated successfully', user : user,status : 200 });
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateAddressById = async (req, res) => {
+  try {
+    const updatedUser = req.body;
+    const user = await userService.updateArressById(updatedUser);
+    res.status(200).json({ 'message': 'User details updated successfully', user : user,user : user,status : 200 });
+  } catch (error) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };
@@ -86,5 +97,6 @@ module.exports = {
   getUserbyMail,
   forgetPasswordByEmail,
   ChangePasswordByUserId,
-  updateUserById
+  updateUserById,
+  updateAddressById
 };

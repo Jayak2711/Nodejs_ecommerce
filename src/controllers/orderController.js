@@ -25,7 +25,7 @@ const getorderWithDate = async (req, res) => {
   try {
     const count = await orderService.getorderWithDate(req.body);
     console.log('-------------------------',count)
-    res.status(200).json({'message' : 'Count',sale :count.rows.length,status : 'success'});
+    res.status(200).json({'message' : 'Count',result:count.rows,sale :count.rows.length,status : 'success'});
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: error.message });

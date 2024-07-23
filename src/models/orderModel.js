@@ -34,8 +34,6 @@ const insertAllCartRec = async(data) => {
     const baseQuery = 'INSERT INTO public.order_tbl (payment_mode, quantity, user_id, p_id, created_on) VALUES ';
     let values = [];
     let query = baseQuery;
-
-    // Construct the placeholders and values
     const placeholders = data.map((row, rowIndex) => {
       const rowPlaceholders = Object.values(row).map((_, colIndex) => `$${rowIndex * Object.keys(row).length + colIndex + 1}`).join(', ');
       values.push(...Object.values(row));
@@ -43,17 +41,10 @@ const insertAllCartRec = async(data) => {
     }).join(', ');
 
     query += placeholders + ' RETURNING *;';
-
-    console.log('Constructed Query:', query);
-    console.log('Values:', values);
-
     const restultData = await pool.query(query, values);
     return restultData;
 
     }
-
-// let data = await pool.query(`SELECT u.oder_id, u.created_on,u.payment_mode, c.user_id,c.p_id,c.quantity,d.price  
-//     FROM  public.oder_tbl u JOIN public.cart_tbl c ON u.cart_id = cart.id WHERE user_id = $1`,[id]);
 
 module.exports = {
     getAllOrderAdmin,

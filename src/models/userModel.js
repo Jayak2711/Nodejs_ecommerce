@@ -29,15 +29,66 @@ const forgetPasswordByEmail = async (id) => {
  };
 
  const updateUserById = async (user) => {
-  const { user_id, user_name, email_id, password, first_name, last_name, phone_number } = user;
-  const data = await pool.query(
-    `UPDATE public.user_tbl
-     SET user_name = $2, email_id = $3, password = $4, first_name = $5, last_name = $6, phone_number = $7
-     WHERE user_id = $1
-     RETURNING *`,
-    [user_id, user_name, email_id, password, first_name, last_name, phone_number]
-  );
-  return data.rows[0];
+  // const { user_id, user_name, email_id, password, first_name, last_name, phone_number } = user;
+  // const data = await pool.query(
+  //   `UPDATE public.user_tbl
+  //    SET user_name = $2, email_id = $3, password = $4, first_name = $5, last_name = $6, phone_number = $7
+  //    WHERE user_id = $1
+  //    RETURNING *`,
+  //   [user_id, user_name, email_id, password, first_name, last_name, phone_number, first_name, last_name]
+  // );
+  // return data.rows[0];
+  const { user_id, ...fields } = user;
+  
+  // Prepare dynamic SQL query and parameters
+  let query = 'UPDATE public.user_tbl SET ';
+  const params = [];
+  let index = 1;
+
+  // Iterate over fields to build the query and parameter list
+  for (const [key, value] of Object.entries(fields)) {
+    if (value !== undefined && value !== null) {
+      query += `${key} = $${index++}, `;
+      params.push(value);
+    }
+  }
+
+  // Remove trailing comma and space
+  query = query.slice(0, -2);
+  query += ' WHERE user_id = $' + index++;
+  params.push(user_id);
+
+  query += ' RETURNING *';
+
+  // Execute the query with dynamically built SQL and parameters
+  const result = await pool.query(query, params);
+  return result.rows[0];
+};
+
+const updateAddressById = async (user) => {
+  const { user_id, ...fields } = user;
+  let query = 'UPDATE public.address_tbl SET ';
+  const params = [];
+  let index = 1;
+
+  // Iterate over fields to build the query and parameter list
+  for (const [key, value] of Object.entries(fields)) {
+    if (value !== undefined && value !== null) {
+      query += `${key} = $${index++}, `;
+      params.push(value);
+    }
+  }
+
+  // Remove trailing comma and space
+  query = query.slice(0, -2);
+  query += ' WHERE user_id = $' + index++;
+  params.push(user_id);
+
+  query += ' RETURNING *';
+
+  // Execute the query with dynamically built SQL and parameters
+  const result = await pool.query(query, params);
+  return result.rows[0];
 };
  
 
@@ -46,6 +97,7 @@ module.exports = {
   getUserbyMail,
   forgetPasswordByEmail,
   ChangePasswordByUserId,
-  updateUserById
+  updateUserById,
+  updateAddressById
 
 };
