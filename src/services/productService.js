@@ -4,8 +4,14 @@ const insertCartByProdId = async (res) => {
   return await prodctModel.insertCartByProdId(res);
 };
 
+
+
 const addNewProduct = async (res) => {
   return await prodctModel.addNewProduct(res);
+};
+
+const inserCategory = async (res) => {
+  return await prodctModel.inserCategory(res);
 };
 
 const selectCartByUserId = async (res) => {
@@ -36,6 +42,10 @@ const deleteProductById = async (res) => {
   return await prodctModel.deleteProductById(res);
 };
 
+const deleteCategory = async (res) => {
+  return await prodctModel.deleteCategory(res);
+};
+
 module.exports = {
   insertCartByProdId,
   selectCartByUserId,
@@ -45,5 +55,7 @@ module.exports = {
   selectProductByCategory,
   deleteProductById,
   selectAllProduct,
-  addNewProduct
+  addNewProduct,
+  inserCategory,
+  deleteCategory
 };

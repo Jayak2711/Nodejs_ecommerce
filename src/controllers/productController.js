@@ -13,6 +13,8 @@ const insertCartData = async (req, res) => {
   }
 };
 
+
+
 const addNewProduct = async (req, res) => {
   try {
     const result = await productService.addNewProduct(req.body);
@@ -21,6 +23,17 @@ const addNewProduct = async (req, res) => {
   catch (error) {
     await pool.query('ROLLBACK');
     console.error(error)
+    res.status(500).json({ error: 'Error inserting data' });
+  }
+};
+
+const insertCategory = async (req, res) => {
+  try {
+    const result = await productService.inserCategory(req.body);
+    res.status(200).json({ message: 'Data inserted successfully',result : result.rows[0],status : '200'});
+  } 
+  catch (error) {
+    await pool.query('ROLLBACK');
     res.status(500).json({ error: 'Error inserting data' });
   }
 };
@@ -95,6 +108,18 @@ const deleteProductById = async (req, res) => {
     console.error(error)
     res.status(500).json({ error: 'Error deleting data' });
   }
+
+}
+  const deleteCategoryId = async (req, res) => {
+    try {
+    const result = await productService.deleteCategory(req.params.id);
+    console.log('----------------------',result)
+   res.status(200).json({ message: 'Category Deleted successfully',status : '200'});
+    } catch (error) {
+      console.error('sadasdassadsda',error)
+      res.status(500).json({ error: 'Error deleting data' });
+    }
+
 };
 
 
@@ -107,5 +132,7 @@ module.exports = {
   selectProductByCategory,
   selectAllProduct,
   deleteProductById,
-  addNewProduct
+  addNewProduct,
+  insertCategory,
+  deleteCategoryId
 };
