@@ -24,11 +24,16 @@ const updateArressById = async (user) => {
   return await userModel.updateAddressById(user);
 };
 
+const insertUserAddress = async (user) => {
+  return await userModel.insertUserAddress(user);
+};
+
 module.exports = {
   getUserById,
   getUserByEmail,
   forgetPasswordByEmail,
   ChangePasswordByUserId,
   updateUserById,
-  updateArressById
+  updateArressById,
+  insertUserAddress
 };

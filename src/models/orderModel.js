@@ -1,18 +1,29 @@
 const pool = require('../config/db');
 
 const getAllOrderAdmin = async (id) => {
-const data = await pool.query(`SELECT u.id, u.created_on,u.payment_mode,u.p_id,d.price,u.quantity,u.user_id,d.name
+const data = await pool.query(`SELECT u.id, u.created_on,u.p_id,d.price,u.quantity,u.user_id,d.name
 FROM public.order_tbl u 
 JOIN product d ON u.p_id = d.id`);
     return data;
 };
 
 const getAllOrderWithUserId = async (id) => {
-    const data = await pool.query(`SELECT u.id, u.created_on,u.payment_mode,u.p_id,d.price,u.quantity,d.name
+    const data = await pool.query(`SELECT u.id, u.created_on,u.p_id,d.price,d.name
             FROM public.order_tbl u 
             JOIN product d ON u.p_id = d.id  WHERE u.user_id =$1`,[id]);
     return data;
 };
+
+const paymentWithUserId = async (id) => {
+    console.log(id)
+    const data = await pool.query(`select p.id ,p.order_id,p.created_on,p.payment_method,p.status,
+            o.id as order_id,o.p_id as product_id,o.status,o.user_id,o.quantity,r.name,r.price FROM public.payments p 
+            JOIN public.order_tbl o ON p.order_id = o.id    
+            JOIN product r ON o.p_id = r.id where user_id = $1`,[id]);
+        return data;
+};
+
+
 
 const getorderWithDate = async (id) => {
     const date = id.created_on ;
@@ -31,7 +42,7 @@ const insertOrderRec = async(res) => {
 
 
 const insertAllCartRec = async(data) => {
-    const baseQuery = 'INSERT INTO public.order_tbl (payment_mode, quantity, user_id, p_id, created_on) VALUES ';
+    const baseQuery = 'INSERT INTO public.order_tbl (quantity, user_id, p_id, created_on) VALUES ';
     let values = [];
     let query = baseQuery;
     const placeholders = data.map((row, rowIndex) => {
@@ -46,10 +57,31 @@ const insertAllCartRec = async(data) => {
 
     }
 
+    const getOrderIdForPayment = async (id) => {
+        const date = id.created_on ;
+        const data = await pool.query(`select * from public.order_tbl where id = $1`,[date]);
+        return data;
+    };
+
+
+    const insertIntoPaymentWithUSerId = async(res) => {
+        const keys = Object.keys(res);
+        const values = Object.values(res);
+        const placeholders = keys.map((key, index) => `$${index + 1}`).join(', ');
+        let data =  pool.query(`INSERT INTO public.address_tbl (${keys.join(', ')}) VALUES (${placeholders}) RETURNING *`,values);
+        await pool.query('COMMIT');
+        return data;
+        }
+
+
+
 module.exports = {
     getAllOrderAdmin,
     getAllOrderWithUserId,
     getorderWithDate,
     insertOrderRec,
-    insertAllCartRec
+    insertAllCartRec,
+    insertIntoPaymentWithUSerId,
+    getOrderIdForPayment,
+    paymentWithUserId
 }

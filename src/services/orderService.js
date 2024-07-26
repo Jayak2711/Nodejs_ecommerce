@@ -20,10 +20,24 @@ const getAllOrderWithUserId = async (id) => {
   const insertAllCartRec = async (id) => {
     return await oderModel.insertAllCartRec(id);
   };
+
+  const insertIntoPaymentWithUSerId = async (id) => {
+    return await oderModel.insertIntoPaymentWithUSerId(id);
+  };
+  const getOrderIdForPayment = async (id) => {
+    return await oderModel.insertIntoPaymentWithUSerId(id);
+  };
+  const paymentWithUserId = async (id) => {
+    return await oderModel.paymentWithUserId(id);
+  };
+
 module.exports = {
     getAllOrderAdmin,
     getAllOrderWithUserId,
     getorderWithDate,
     insertOrderRec,
-    insertAllCartRec
+    insertAllCartRec,
+    insertIntoPaymentWithUSerId,
+    getOrderIdForPayment,
+    paymentWithUserId
 }

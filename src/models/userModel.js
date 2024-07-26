@@ -3,8 +3,8 @@ const pool = require('../config/db');
 
 const getUserById = async (id) => {
     const data = await pool.query(`select u.user_id,u.is_admin,u.phone_number,u.email_id,u.first_name,u.last_name,u.user_name,u.date_of_birth,
-a.address1,a,address2,a.state,a.district,a.country,a.pincode,a.landmark FROM public.user_tbl u
-JOIN public.address_tbl a ON u.user_id = a.user_id WHERE u.user_id = $1`, [id]);
+a.address1,a,address2,a.state,a.district,a.country,a.pincode,a.landmark,a.id as addressId FROM public.user_tbl u
+LEFT JOIN public.address_tbl a ON u.user_id = a.user_id WHERE u.user_id = $1`, [id]);
     return data;
 };
 
@@ -90,6 +90,15 @@ const updateAddressById = async (user) => {
   const result = await pool.query(query, params);
   return result.rows[0];
 };
+
+const insertUserAddress = async(res) => {
+  const keys = Object.keys(res);
+  const values = Object.values(res);
+  const placeholders = keys.map((key, index) => `$${index + 1}`).join(', ');
+  let data =  pool.query(`INSERT INTO public.address_tbl (${keys.join(', ')}) VALUES (${placeholders}) RETURNING *`,values);
+  await pool.query('COMMIT');
+  return data;
+  }
  
 
 module.exports = {
@@ -98,6 +107,7 @@ module.exports = {
   forgetPasswordByEmail,
   ChangePasswordByUserId,
   updateUserById,
-  updateAddressById
+  updateAddressById,
+  insertUserAddress
 
 };

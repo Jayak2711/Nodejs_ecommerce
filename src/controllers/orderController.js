@@ -24,8 +24,18 @@ const getAllOrderWithUserId = async (req, res) => {
 const getorderWithDate = async (req, res) => {
   try {
     const count = await orderService.getorderWithDate(req.body);
-    console.log('-------------------------',count)
     res.status(200).json({'message' : 'Count',result:count.rows,sale :count.rows.length,status : 'success'});
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const paymentWithUserId = async (req, res) => {
+console.log(req ,'------------------------------------')
+  try { 
+    const count = await orderService.paymentWithUserId(req.params.id );
+    res.status(200).json({'message' : 'Count',result:count.rows,result :count.rows,status : 'success'});
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: error.message });
@@ -48,7 +58,27 @@ const insertOrderRec = async (req, res) => {
 const insertAllCartRec = async (req, res) => {
   try {
     const result = await orderService.insertAllCartRec(req.body);
-    console.log(result)
+    res.status(200).json({ message: 'Data inserted successfullyss',result : result.rows,status : '200'});
+  } 
+  catch (error) {
+    await pool.query('ROLLBACK');
+    console.error(error)
+    res.status(500).json({ error: 'Error inserting data' });
+  }
+};
+
+const getOrderIdForPayment = async(req,res) => {
+  try {
+    const user = await orderService.getOrderIdForPayment(req.params.id);
+    res.status(200).json({'message':'',result:user.rows,'status':200});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const insertIntoPaymentWithUSerId = async (req, res) => {
+  try {
+    const result = await orderService.insertIntoPaymentWithUSerId(req.body);
     res.status(200).json({ message: 'Data inserted successfullyss',result : result,status : '200'});
   } 
   catch (error) {
@@ -58,10 +88,15 @@ const insertAllCartRec = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
     getAllOrderAdmin,
     getAllOrderWithUserId,
     getorderWithDate,
     insertOrderRec,
-    insertAllCartRec
+    insertAllCartRec,
+    insertIntoPaymentWithUSerId,
+    getOrderIdForPayment,
+    paymentWithUserId
 }

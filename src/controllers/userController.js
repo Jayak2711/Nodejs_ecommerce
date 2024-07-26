@@ -3,7 +3,7 @@ const userService = require('../services/userService');
 const getUser = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
-    res.status(200).json({'message':'sucess',result : user.rows[0],'status' :200 });
+    res.status(200).json({'message':'sucess',result : user.rows,'status' :200 });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -90,6 +90,19 @@ const ChangePasswordByUserId = async (req, res) => {
   }
 };
 
+const insertUserAddress = async (req, res) => {
+  try {
+    const result = await userService.insertUserAddress(req.body);
+    res.status(200).json({ message: 'Data inserted successfully',result : result.rows[0],status : 200});
+  } 
+  catch (error) {
+    console.error('Error executing query', err.stack);
+    await pool.query('ROLLBACK');
+    console.error('Error executing query', err.stack);
+    res.status(500).json({ error: 'Error inserting data' });
+  }
+};
+
 
 
 module.exports = {
@@ -98,5 +111,6 @@ module.exports = {
   forgetPasswordByEmail,
   ChangePasswordByUserId,
   updateUserById,
-  updateAddressById
+  updateAddressById,
+  insertUserAddress
 };
