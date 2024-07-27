@@ -77,8 +77,10 @@ const getOrderIdForPayment = async(req,res) => {
 }
 
 const insertIntoPaymentWithUSerId = async (req, res) => {
+  console.log(req.body)
   try {
     const result = await orderService.insertIntoPaymentWithUSerId(req.body);
+    console.log(result)
     res.status(200).json({ message: 'Data inserted successfullyss',result : result,status : '200'});
   } 
   catch (error) {

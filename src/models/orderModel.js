@@ -16,10 +16,34 @@ const getAllOrderWithUserId = async (id) => {
 
 const paymentWithUserId = async (id) => {
     console.log(id)
-    const data = await pool.query(`select p.id ,p.order_id,p.created_on,p.payment_method,p.status,
-            o.id as order_id,o.p_id as product_id,o.status,o.user_id,o.quantity,r.name,r.price FROM public.payments p 
-            JOIN public.order_tbl o ON p.order_id = o.id    
-            JOIN product r ON o.p_id = r.id where user_id = $1`,[id]);
+    // const data = await pool.query(`select p.id ,p.order_id,p.created_on,p.payment_method,p.status,
+    //         o.id as order_id,o.p_id as product_id,o.status,o.user_id,o.quantity,r.name,r.price FROM public.payments p 
+    //         JOIN public.order_tbl o ON p.order_id = o.id    
+    //         JOIN product r ON o.p_id = r.id where user_id = $1`,[id]);
+    //     return data;
+         const data = await pool.query(
+    `SELECT 
+    p.id AS payment_id,
+    p.created_on AS payment_created_on,
+    p.payment_method AS payment_method,
+    p.status AS payment_status,
+    o.id AS order_id,
+    o.p_id AS product_id,
+    o.status AS order_status,
+    o.user_id AS order_user_id,
+    o.quantity AS order_quantity,
+    r.name AS product_name,
+    r.price AS product_price
+FROM 
+    public.payments p
+JOIN 
+    LATERAL jsonb_array_elements_text(p.order_is::jsonb) AS order_is_element ON TRUE
+JOIN 
+    public.order_tbl o ON o.id = order_is_element::int
+JOIN 
+    product r ON o.p_id = r.id
+WHERE 
+    o.user_id = $1`,[id]);
         return data;
 };
 
@@ -65,10 +89,15 @@ const insertAllCartRec = async(data) => {
 
 
     const insertIntoPaymentWithUSerId = async(res) => {
-        const keys = Object.keys(res);
-        const values = Object.values(res);
-        const placeholders = keys.map((key, index) => `$${index + 1}`).join(', ');
-        let data =  pool.query(`INSERT INTO public.address_tbl (${keys.join(', ')}) VALUES (${placeholders}) RETURNING *`,values);
+        const orderIdsJson = JSON.stringify(res.order_id);
+console.log(orderIdsJson)
+        let data =   pool.query('INSERT INTO public.Payments (created_on, payment_method, status, order_is) VALUES ($1, $2, $3, $4)',
+            [res.created_on, res.payment_method, res.status, orderIdsJson])
+
+        // const keys = Object.keys(res);
+        // const values = Object.values(res);
+        // const placeholders = keys.map((key, index) => `$${index + 1}`).join(', ');
+        // let data =  pool.query(`INSERT INTO public.payments (${keys.join(', ')}) VALUES (${placeholders}) RETURNING *`,values);
         await pool.query('COMMIT');
         return data;
         }
