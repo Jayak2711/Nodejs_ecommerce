@@ -54,7 +54,6 @@ const insertOrderRec = async (req, res) => {
   }
 };
 
-
 const insertAllCartRec = async (req, res) => {
   try {
     const result = await orderService.insertAllCartRec(req.body);
@@ -80,12 +79,17 @@ const insertIntoPaymentWithUSerId = async (req, res) => {
   console.log(req.body)
   try {
     const result = await orderService.insertIntoPaymentWithUSerId(req.body);
-    console.log(result)
-    res.status(200).json({ message: 'Data inserted successfullyss',result : result,status : '200'});
+    console.log(result.rows,'---------------------------')
+    if(result){
+      const order =  await orderService.updateOrderTable(req.body);
+    // res.status(200).json({ message: 'Order Updated',result : order,status : '200'});
+    console.log(order)
+    res.status(200).json({ message: 'Payment Success',result : order,status : '200'});
   } 
+}
   catch (error) {
+    console.log(error)
     await pool.query('ROLLBACK');
-    console.error(error)
     res.status(500).json({ error: 'Error inserting data' });
   }
 };

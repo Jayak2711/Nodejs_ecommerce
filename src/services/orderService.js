@@ -31,6 +31,9 @@ const getAllOrderWithUserId = async (id) => {
     return await oderModel.paymentWithUserId(id);
   };
 
+  const updateOrderTable = async (id) => {
+    return await oderModel.updateOrderTable(id);
+  };
 module.exports = {
     getAllOrderAdmin,
     getAllOrderWithUserId,
@@ -39,5 +42,6 @@ module.exports = {
     insertAllCartRec,
     insertIntoPaymentWithUSerId,
     getOrderIdForPayment,
-    paymentWithUserId
+    paymentWithUserId,
+    updateOrderTable
 }

@@ -29,15 +29,7 @@ const forgetPasswordByEmail = async (id) => {
  };
 
  const updateUserById = async (user) => {
-  // const { user_id, user_name, email_id, password, first_name, last_name, phone_number } = user;
-  // const data = await pool.query(
-  //   `UPDATE public.user_tbl
-  //    SET user_name = $2, email_id = $3, password = $4, first_name = $5, last_name = $6, phone_number = $7
-  //    WHERE user_id = $1
-  //    RETURNING *`,
-  //   [user_id, user_name, email_id, password, first_name, last_name, phone_number, first_name, last_name]
-  // );
-  // return data.rows[0];
+ 
   const { user_id, ...fields } = user;
   
   // Prepare dynamic SQL query and parameters
@@ -99,6 +91,8 @@ const insertUserAddress = async(res) => {
   await pool.query('COMMIT');
   return data;
   }
+
+
  
 
 module.exports = {
