@@ -80,7 +80,12 @@ const deleteCategory = async(res) => {
   return data;
 }
 
-
+const updateCategory =  async (id) => {
+  const userCred = id ;
+  const data = await pool.query(`UPDATE public.category SET description = $1,name = $2 WHERE id = $3`,[userCred.description,userCred.name,userCred.id]);
+  return data;
+ };
+ 
 
 
 module.exports = {
@@ -94,5 +99,6 @@ module.exports = {
     deleteProductById,
     addNewProduct,
     inserCategory,
-    deleteCategory
+    deleteCategory,
+    updateCategory
 };

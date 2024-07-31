@@ -21,8 +21,8 @@ const addNewProduct = async (req, res) => {
     res.status(200).json({ message: 'Data inserted successfully',result : result.rows[0],status : '200'});
   } 
   catch (error) {
-    await pool.query('ROLLBACK');
     console.error(error)
+    await pool.query('ROLLBACK');
     res.status(500).json({ error: 'Error inserting data' });
   }
 };
@@ -39,7 +39,6 @@ const insertCategory = async (req, res) => {
 };
 
 const deleteCartByCarId = async (req, res) => {
-  console.log('sadddddasddas',req.body)
   try {
   const result = await productService.deleteCartByProdId(req.body);
   console.log('',result)
@@ -122,6 +121,18 @@ const deleteProductById = async (req, res) => {
 
 };
 
+const updateCategory = async (req, res) => {
+  try {
+    const result = await productService.updateCategory(req.body);
+    // console.log(result)
+    res.status(200).json({ message: 'Updated Successfully',result : result.rows[0],status : '200'});
+  } 
+  catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'Error in updation',status : 500 });
+  }
+};
+
 
 module.exports = {
   insertCartData,
@@ -134,5 +145,6 @@ module.exports = {
   deleteProductById,
   addNewProduct,
   insertCategory,
-  deleteCategoryId
+  deleteCategoryId,
+  updateCategory
 };

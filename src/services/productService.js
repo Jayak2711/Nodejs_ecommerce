@@ -46,6 +46,10 @@ const deleteCategory = async (res) => {
   return await prodctModel.deleteCategory(res);
 };
 
+const updateCategory = async (res) => {
+  return await prodctModel.updateCategory(res);
+};
+
 module.exports = {
   insertCartByProdId,
   selectCartByUserId,
@@ -57,5 +61,6 @@ module.exports = {
   selectAllProduct,
   addNewProduct,
   inserCategory,
-  deleteCategory
+  deleteCategory,
+  updateCategory
 };

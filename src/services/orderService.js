@@ -5,7 +5,7 @@ const getAllOrderAdmin = async (id) => {
 };
 
 const getAllOrderWithUserId = async (id) => {
-    console.log('saddddddddddddddddddddddddd',id)
+
     return await oderModel.getAllOrderWithUserId(id);
   };
 
