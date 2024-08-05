@@ -14,6 +14,13 @@ const getUserbyMail = async (id) => {
  return data;
 };
 
+const getPasswordFromPsswordTbl = async (id) => {
+  const userCred = id ;
+  console.log(id)
+  const data = await pool.query(`SELECT * FROM public.password_tbl WHERE user_id = $1`, [userCred]);
+  return data;
+ };
+
 
 const forgetPasswordByEmail = async (id) => {
   const userCred = id.email ;
@@ -93,7 +100,6 @@ const insertUserAddress = async(res) => {
   }
 
 
- 
 
 module.exports = {
   getUserById,
@@ -102,6 +108,7 @@ module.exports = {
   ChangePasswordByUserId,
   updateUserById,
   updateAddressById,
-  insertUserAddress
+  insertUserAddress,
+  getPasswordFromPsswordTbl
 
 };

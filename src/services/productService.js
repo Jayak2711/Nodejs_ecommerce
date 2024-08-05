@@ -10,6 +10,10 @@ const addNewProduct = async (res) => {
   return await prodctModel.addNewProduct(res);
 };
 
+const updateProduct = async (res) => {
+  return await prodctModel.updateProduct(res);
+};
+
 const inserCategory = async (res) => {
   return await prodctModel.inserCategory(res);
 };
@@ -18,6 +22,9 @@ const selectCartByUserId = async (res) => {
   return await prodctModel.selectCartByUserId(res);
 };
 
+const getProductById = async (res) => {
+  return await prodctModel.getProductById(res);
+};
 const getAllCartRecord = async () => {
   return await prodctModel.getAllCartRecord();
 };
@@ -62,5 +69,7 @@ module.exports = {
   addNewProduct,
   inserCategory,
   deleteCategory,
-  updateCategory
+  updateCategory,
+  getProductById,
+  updateProduct
 };

@@ -13,7 +13,6 @@ const getUser = async (req, res) => {
 const getUserbyMail = async (req, res) => {
   try {
     const user = await userService.getUserByEmail(req.body);
-    console.log(user)
     const arr = user.rows;
     if(arr.length  ==  0){
       return  res.status(200).json({
@@ -21,8 +20,11 @@ const getUserbyMail = async (req, res) => {
         status : 'failed'
         });
     }else{
+      console.log('----------------',user.rows[0])
+      const password = await userService.getPasswordFromPsswordTbl(user.rows[0].user_id);
+      const last = password.rows[password.rows.length - 1];
       let enteredPass = req.body.password;
-      uPass = user.rows[0].password;
+      uPass = last.password;
       if (enteredPass == uPass) {
         res.status(200).json({message : 'Login Successfully done',result :(user.rows[0]),status:'success'});
       }
@@ -36,6 +38,8 @@ const getUserbyMail = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 const forgetPasswordByEmail = async (req, res) => {
   console.log('sadasdsads',req.body)

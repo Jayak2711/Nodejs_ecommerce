@@ -28,6 +28,11 @@ const insertUserAddress = async (user) => {
   return await userModel.insertUserAddress(user);
 };
 
+const getPasswordFromPsswordTbl = async (user) => {
+  return await userModel.getPasswordFromPsswordTbl(user);
+};
+
+
 module.exports = {
   getUserById,
   getUserByEmail,
@@ -35,5 +40,6 @@ module.exports = {
   ChangePasswordByUserId,
   updateUserById,
   updateArressById,
-  insertUserAddress
+  insertUserAddress,
+  getPasswordFromPsswordTbl
 };

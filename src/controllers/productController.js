@@ -27,6 +27,17 @@ const addNewProduct = async (req, res) => {
   }
 };
 
+const updateProduct = async (req, res) => {
+  try {
+    const result = await productService.updateProduct(req.body);
+    console.log('--------------------------------------',result)
+    res.status(200).json({ message: 'Update successfully',result : result.rows[0],status : '200'});
+  } 
+  catch (error) {
+    res.status(500).json({ error: 'Error inserting data' });
+  }
+};
+
 const insertCategory = async (req, res) => {
   try {
     const result = await productService.inserCategory(req.body);
@@ -133,6 +144,16 @@ const updateCategory = async (req, res) => {
   }
 };
 
+const getProductById = async (req, res) => {
+  try {
+    const result = await productService.getProductById(req.params.id);
+     res.status(200).json({ message: 'Data fetched successfully',result :result.rows[0],status : '200'}); 
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Error Selectings data' });
+  }
+};
+
 
 module.exports = {
   insertCartData,
@@ -146,5 +167,7 @@ module.exports = {
   addNewProduct,
   insertCategory,
   deleteCategoryId,
-  updateCategory
+  updateCategory,
+  getProductById,
+  updateProduct
 };

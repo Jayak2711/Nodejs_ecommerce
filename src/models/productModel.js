@@ -19,6 +19,31 @@ const insertCartByProdId = async(res) => {
     return data;
     }
 
+    const updateProduct = async(res) => {
+      const { id, ...fields } = res;
+      let query = 'UPDATE public.product SET ';
+      const params = [];
+      let index = 1;
+    
+      // Iterate over fields to build the query and parameter list
+      for (const [key, value] of Object.entries(fields)) {
+        if (value !== undefined && value !== null) {
+          query += `${key} = $${index++}, `;
+          params.push(value);
+        }
+      }
+    console.log(params)
+      // Remove trailing comma and space
+      query = query.slice(0, -2);
+      query += ' WHERE id = $' + index++;
+      params.push(id);
+      query += ' RETURNING *';
+    
+      // Execute the query with dynamically built SQL and parameters
+      const result = await pool.query(query, params);
+      return result;
+    }
+
     const inserCategory = async(res) => {
       const keys = Object.keys(res);
       const values = Object.values(res);
@@ -67,6 +92,11 @@ const selectAllProduct = async() => {
   return data;
 }
 
+const getProductById = async(res) => {
+  let data = await pool.query(`SELECT * FROM product WHERE id = $1`,[res]);
+  return data;
+}
+
 const deleteProductById = async(res) => {
   const id = res;
   let data =   pool.query('DELETE FROM product WHERE id = $1', [id]);
@@ -100,5 +130,7 @@ module.exports = {
     addNewProduct,
     inserCategory,
     deleteCategory,
-    updateCategory
+    updateCategory,
+    getProductById,
+    updateProduct
 };
