@@ -2,9 +2,12 @@ const pool = require('../config/db');
 
 
 const getUserById = async (id) => {
-    const data = await pool.query(`select u.user_id,u.is_admin,u.phone_number,u.email_id,u.first_name,u.last_name,u.user_name,u.date_of_birth,
-a.address1,a,address2,a.state,a.district,a.country,a.pincode,a.landmark,a.id as addressId FROM public.user_tbl u
-LEFT JOIN public.address_tbl a ON u.user_id = a.user_id WHERE u.user_id = $1`, [id]);
+    const data = await pool.query(`select u.user_id,u.is_admin,u.phone_number,u.email_id,u.first_name,u.last_name,u.user_name,p.password,
+      u.date_of_birth,
+      a.address1,a,address2,a.state,a.district,a.country,a.pincode,a.landmark,a.id as addressId 
+      FROM public.user_tbl u
+      LEFT JOIN public.password_tbl p ON u.user_id = p.user_id
+      LEFT JOIN public.address_tbl a ON u.user_id = a.user_id  WHERE u.user_id = $1`, [id]);
     return data;
 };
 

@@ -3,7 +3,9 @@ const userService = require('../services/userService');
 const getUser = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
-    res.status(200).json({'message':'sucess',result : user.rows,'status' :200 });
+    const last = user.rows[user.rows.length - 1];
+    console.log(last)
+    res.status(200).json({'message':'sucess',result : last,'status' :200 });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

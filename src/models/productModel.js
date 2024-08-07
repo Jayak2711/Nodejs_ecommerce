@@ -32,7 +32,6 @@ const insertCartByProdId = async(res) => {
           params.push(value);
         }
       }
-    console.log(params)
       // Remove trailing comma and space
       query = query.slice(0, -2);
       query += ' WHERE id = $' + index++;
