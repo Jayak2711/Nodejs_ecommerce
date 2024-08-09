@@ -6,14 +6,16 @@ const getAllOrderAdmin = async (id) => {
 // JOIN product d ON u.p_id = d.id`);
 //     return data;
         const data = await pool.query(
-            `SELECT 
+        `SELECT 
         p.id AS payment_id,
         p.created_on AS payment_created_on,
         p.payment_method AS payment_method,
         p.status AS payment_status,
+        p.trackrec,
         o.id AS order_id,
         o.p_id AS product_id,
         o.status AS order_status,
+        p.trackrec,
         o.user_id AS order_user_id,
         o.quantity AS order_quantity,
         r.name AS product_name,
@@ -42,6 +44,7 @@ const paymentWithUserId = async (id) => {
     p.id AS payment_id,
     p.created_on AS payment_created_on,
     p.payment_method AS payment_method,
+    p.trackrec,
     p.status AS payment_status,
     o.id AS order_id,
     o.p_id AS product_id,
@@ -105,16 +108,14 @@ const getOrderIdForPayment = async (id) => {
 
 const insertIntoPaymentWithUSerId = async (res) => {
     const orderIdsJson = JSON.stringify(res.order_id);
-    console.log(orderIdsJson)
-    let data = pool.query('INSERT INTO public.Payments (created_on, payment_method, status, order_is) VALUES ($1, $2, $3, $4)',
-        [res.created_on, res.payment_method, res.status, orderIdsJson])
+    let data = pool.query('INSERT INTO public.Payments (created_on, payment_method, status,trackrec,order_is) VALUES ($1, $2, $3, $4, $5)',
+        [res.created_on, res.payment_method, res.status,res.trackrec, orderIdsJson])
     await pool.query('COMMIT');
     return data;
 }
 
 const updateOrderTable = async (res) => {
     const order_id = res.order_id
-    console.log('+++++++++++++++++++++++++++++++',order_id)
     const query = `
                   UPDATE public.order_tbl
                   SET status = 'Success'
@@ -123,6 +124,24 @@ const updateOrderTable = async (res) => {
     const result = await pool.query(query, values);
     return result;
 }
+
+const categoryReport = async (id) => {
+    const data = await pool.query(
+        `SELECT
+    c.id,
+    c.name,
+    COALESCE(SUM(o.quantity), 0) AS sale
+FROM
+    public.category c
+    LEFT JOIN public.Product p ON CAST(p.categoryid AS bigint) = c.id
+    LEFT JOIN public.order_tbl o ON p.id = o.p_id
+GROUP BY
+    c.id, c.name
+ORDER BY
+    c.id;`);
+    return data;
+};
+
 
 
 
@@ -135,5 +154,6 @@ module.exports = {
     insertIntoPaymentWithUSerId,
     getOrderIdForPayment,
     paymentWithUserId,
-    updateOrderTable
+    updateOrderTable,
+    categoryReport
 }

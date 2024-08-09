@@ -11,5 +11,5 @@ router.post('/addAllorder/', oderController.insertAllCartRec);
 router.post('/oderPayment/', oderController.getOrderIdForPayment);
 router.post('/addPayment/', oderController.insertIntoPaymentWithUSerId);
 router.get('/paymentHistory/:id', oderController.paymentWithUserId);
-console.log()
+router.get('/report/categoryReport/', oderController.categoryReport);
 module.exports = router;

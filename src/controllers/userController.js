@@ -102,9 +102,7 @@ const insertUserAddress = async (req, res) => {
     res.status(200).json({ message: 'Data inserted successfully',result : result.rows[0],status : 200});
   } 
   catch (error) {
-    console.error('Error executing query', err.stack);
     await pool.query('ROLLBACK');
-    console.error('Error executing query', err.stack);
     res.status(500).json({ error: 'Error inserting data' });
   }
 };
